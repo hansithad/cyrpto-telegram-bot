@@ -7,6 +7,24 @@ var fetch = require('node-fetch');
 // const request = require('request');
 
 const bot = new Telegraf('1704161411:AAGhQLhEX1gX2YapeGtGSTzURaAWj_X6NA8');
+const botName = 'David346';
+
+const helpButtons = Markup.inlineKeyboard([
+    [Markup.button.callback('New', 'new'),
+        Markup.button.callback('Price', 'price'),
+        Markup.button.callback('Charts', 'charts')],
+    [Markup.button.callback('Trading', 'trading'),
+        Markup.button.callback('Info', 'info'),
+        Markup.button.callback('Stocks', 'stocks')],
+    [Markup.button.callback('Fun', 'fun'),
+        Markup.button.callback('Pro', 'pro'),
+        Markup.button.callback('Util', 'util')]
+]);
+
+
+
+
+
 var respr1;
 
 
@@ -42,6 +60,25 @@ bot.command ( async(ctx) => {
 
 const str1 = '/p';
 console.log('msg is '+ctx.message.text);
+const trimmedMsg = ctx.message.text.trim();
+const supported_commands = {help:'/help'};
+if(ctx.message.text==supported_commands.help){
+
+    const helpMessage =
+        "<a href=\"/bot_command?command=p&bot="+botName+"\">/p</a> - get price of coin"+
+        "\n<a href=\"/bot_command?command=c&bot="+botName+"\">/c</a> - get a coin chart"+
+        "\n<a href=\"/bot_command?command=ch&bot="+botName+"\">/ch</a> - calculate the number of coins"+
+        "\n<a href=\"/bot_command?command=tv&bot="+botName+"\">/tv</a> - get a TradingView Chart"+
+        "\n<a href=\"/bot_command?command=cap&bot="+botName+"\">/cap</a> - get marketcap info"+
+        "\n<a href=\"/bot_command?command=index&bot="+botName+"\">/index</a> - get an index"
+    ;
+    return await ctx.replyWithHTML(helpMessage,helpButtons);
+
+}
+
+
+
+
 if( ctx.message.text.indexOf(str1) >= 0){
 
   var splitt = ctx.message.text.split(" ");
@@ -70,8 +107,24 @@ if( ctx.message.text.indexOf(str1) >= 0){
 
 
 bot.on("callback_query", async function(ctx){
-  var ctx1 = JSON.stringify(ctx.update.callback_query.data);
-  
+  var callbackCommand = ctx.update.callback_query.data;
+  console.log('callback_query '+callbackCommand);
+  if(callbackCommand=='new'){
+
+      //TODO find a way to edit text as html
+      const newHelpMessage =
+          "<a href=\"/bot_command?command=defi&bot="+botName+"\">/defi</a> - get a defi index"+
+          "\n<a href=\"/bot_command?command=tw&bot="+botName+"\">/tw</a> coin - get twitter feed for coin"+
+          "\n<a href=\"/bot_command?command=txfee&bot="+botName+"\">/txfee</a> - get btc tx fees"+
+          "\n<a href=\"/bot_command?command=up&bot="+botName+"\">/up</a> - get uniswap pricing"+
+          "\n<a href=\"/bot_command?command=trending&bot="+botName+"\">/trending</a> -  get Coins Trending On Coingecko"
+      ;
+      return ctx.editMessageText(newHelpMessage,helpButtons);
+  }
+  else {
+      console.log('no handle found');
+  }
+
 
  // var splitt2 = ctx1.data.split("|");
   if (ctx1.indexOf('R1|') >= 0){
